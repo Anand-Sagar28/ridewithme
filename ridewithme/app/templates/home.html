@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Upcoming Rides</h1>
+
+{% for ride in rides %}
+  <div>
+    <h3>{{ ride.title }}</h3>
+    <p>{{ ride.start_location }} → {{ ride.end_location }}</p>
+    <p>{{ ride.start_datetime }}</p>
+    <p>Leader: {{ ride.leader_name }}</p>
+    <p>Slots left: {{ ride.available_slots }}</p>
+  </div>
+{% endfor %}
+{% endblock %}
