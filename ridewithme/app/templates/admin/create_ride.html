@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Create Ride</h2>
+
+<form method="POST">
+  <input name="title" placeholder="Title" required><br>
+  <textarea name="description" placeholder="Description"></textarea><br>
+  <input name="start_location" placeholder="Start location" required><br>
+  <input name="end_location" placeholder="End location" required><br>
+  <input type="datetime-local" name="start_datetime" required><br>
+  <input type="number" name="max_participants" required><br>
+  <input name="leader_name" placeholder="Leader name" required><br>
+  <input name="leader_contact" placeholder="Leader contact" required><br>
+
+  <button type="submit">Create Ride</button>
+</form>
+{% endblock %}

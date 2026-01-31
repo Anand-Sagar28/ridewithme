@@ -10,6 +10,12 @@
     <p>{{ ride.start_datetime }}</p>
     <p>Leader: {{ ride.leader_name }}</p>
     <p>Slots left: {{ ride.available_slots }}</p>
+  {% if config.ADMIN_MODE %}
+  <a href="/admin/rides/new" style="position:fixed;bottom:20px;right:20px;">
+    ➕
+  </a>
+{% endif %}
+
   </div>
 {% endfor %}
 {% endblock %}
