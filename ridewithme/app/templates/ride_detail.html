@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ ride.title }}</h2>
+<p>{{ ride.description }}</p>
+<p>{{ ride.start_location }} → {{ ride.end_location }}</p>
+<p>{{ ride.start_datetime }}</p>
+
+{% if session.get("user_id") %}
+  <form method="POST" action="/rides/{{ ride.id }}/join">
+    <button type="submit">Join Ride</button>
+  </form>
+{% else %}
+  <a href="/login">Login to Join</a>
+{% endif %}
+
+{% endblock %}

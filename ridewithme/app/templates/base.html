@@ -1,9 +1,12 @@
-<!doctype html>
-<html>
-<head>
-  <title>RideWithMe</title>
-</head>
 <body>
+  <nav>
+    {% if session.get("user_id") %}
+      <a href="/logout">Logout</a>
+    {% else %}
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    {% endif %}
+  </nav>
+
   {% block content %}{% endblock %}
 </body>
-</html>

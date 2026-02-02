@@ -12,6 +12,7 @@
     <p>Slots left: {{ ride.available_slots }}</p>
   {% if config.ADMIN_MODE %}
   <a href="/admin/rides/new" style="position:fixed;bottom:20px;right:20px;">
+  <a href="/rides/{{ ride.id }}">View Details</a>
     ➕
   </a>
 {% endif %}
