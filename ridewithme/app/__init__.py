@@ -10,6 +10,10 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object("app.config.Config")
 
+    @app.context_processor
+    def inject_config():
+        return dict(config=app.config)
+
     from app.blueprints.rides.routes import rides_bp
     app.register_blueprint(rides_bp)
     app.register_blueprint(admin_bp)
