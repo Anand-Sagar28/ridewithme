@@ -21,7 +21,12 @@ def join(ride_id):
     if not user_id:
         return redirect(url_for("auth.login"))
 
-    return redirect(url_for("rides.confirm_join", ride_id=ride_id))
+    success, error = join_ride(user_id, ride_id)
+
+    if not success:
+        return redirect(f"/#confirm{ride_id}?error={error}")
+
+    return redirect(f"/#confirm{ride_id}?joined=1")
 
 
 @rides_bp.route("/rides/<int:ride_id>/confirm", methods=["GET", "POST"])
@@ -60,4 +65,14 @@ def payment(ride_id):
 @rides_bp.route("/")
 def home():
     rides = list_rides()
-    return render_template("home.html", rides=rides)
+    error = request.args.get("error")
+    joined = request.args.get("joined")
+    ride_id = request.args.get("ride_id")
+
+    return render_template(
+        "home.html",
+        rides=rides,
+        error=error,
+        joined=joined,
+        ride_id=ride_id
+    )

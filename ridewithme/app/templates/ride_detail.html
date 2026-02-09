@@ -1,16 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ ride.title }}</h2>
-<p>{{ ride.description }}</p>
-<p>{{ ride.start_location }} → {{ ride.end_location }}</p>
-<p>{{ ride.start_datetime }}</p>
+<section class="section compact">
+  <div class="ride-detail">
+    <div class="ride-detail-header">
+      <div>
+        <h2>{{ ride.title }}</h2>
+        <p class="muted">{{ ride.start_location }} → {{ ride.end_location }}</p>
+      </div>
+      <span class="ride-pill">{{ ride.available_slots }} slots left</span>
+    </div>
+    <p class="ride-date">{{ ride.start_datetime }}</p>
+    <p>{{ ride.description }}</p>
 
-{% if session.get("user_id") %}
-  <form method="POST" action="/rides/{{ ride.id }}/join">
-    <button type="submit">Join Ride</button>
-  </form>
-{% else %}
-  <a href="/login">Login to Join</a>
-{% endif %}
-
+    {% if session.get("user_id") %}
+      <form method="POST" action="/rides/{{ ride.id }}/join">
+        <button class="btn" type="submit">Join Ride</button>
+      </form>
+    {% else %}
+      <a class="btn" href="/login">Login to Join</a>
+    {% endif %}
+  </div>
+</section>
 {% endblock %}

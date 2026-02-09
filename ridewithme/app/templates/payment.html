@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Participation Fee ₹49</h2>
+<section class="section compact">
+  <div class="form-card">
+    <h2>Participation fee</h2>
+    <p class="muted">Secure your seat with a small fee collected by the ride leader.</p>
+    <div class="price">₹49</div>
 
-<form method="POST">
-  <button type="submit">Pay Now</button>
-</form>
+    <form method="POST" class="form">
+      <button class="btn btn-block" type="submit">Pay now</button>
+    </form>
+  </div>
+</section>
 {% endblock %}

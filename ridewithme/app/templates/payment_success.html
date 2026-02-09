@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
+<section class="section compact">
+  <div class="form-card success">
+    <h2>Payment successful</h2>
+    <p class="muted">Your participation code:</p>
 
-<h2>Payment Successful!</h2>
-<p>Your participation code:</p>
+    <div class="code-box">{{ code }}</div>
 
-<h1 style="color:green;">{{ code }}</h1>
+    <p class="muted">Show this code to the ride leader on ride day.</p>
 
-<p>Show this code to the ride leader on ride day.</p>
-
-<a href="/">Go Home</a>
-
+    <a class="btn btn-block" href="/">Go home</a>
+  </div>
+</section>
 {% endblock %}

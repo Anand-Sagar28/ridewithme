@@ -1,17 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Create Ride</h2>
+<section class="section compact">
+  <div class="form-card">
+    <h2>Create a new ride</h2>
+    <p class="muted">Share the route details so riders know what to expect.</p>
 
-<form method="POST">
-  <input name="title" placeholder="Title" required><br>
-  <textarea name="description" placeholder="Description"></textarea><br>
-  <input name="start_location" placeholder="Start location" required><br>
-  <input name="end_location" placeholder="End location" required><br>
-  <input type="datetime-local" name="start_datetime" required><br>
-  <input type="number" name="max_participants" required><br>
-  <input name="leader_name" placeholder="Leader name" required><br>
-  <input name="leader_contact" placeholder="Leader contact" required><br>
+    <form method="POST" class="form">
+      <label class="form-label" for="title">Ride title</label>
+      <input id="title" name="title" placeholder="Sunrise Loop" required>
 
-  <button type="submit">Create Ride</button>
-</form>
+      <label class="form-label" for="description">Description</label>
+      <textarea id="description" name="description" placeholder="Route notes, pace, and gear requirements"></textarea>
+
+      <label class="form-label" for="start_location">Start location</label>
+      <input id="start_location" name="start_location" placeholder="Downtown Plaza" required>
+
+      <label class="form-label" for="end_location">End location</label>
+      <input id="end_location" name="end_location" placeholder="Riverside Park" required>
+
+      <label class="form-label" for="start_datetime">Start date & time</label>
+      <input id="start_datetime" type="datetime-local" name="start_datetime" required>
+
+      <label class="form-label" for="max_participants">Max participants</label>
+      <input id="max_participants" type="number" name="max_participants" min="1" required>
+
+      <label class="form-label" for="leader_name">Leader name</label>
+      <input id="leader_name" name="leader_name" placeholder="Priya Shah" required>
+
+      <label class="form-label" for="leader_contact">Leader contact</label>
+      <input id="leader_contact" name="leader_contact" placeholder="Email or phone" required>
+
+      <button class="btn btn-block" type="submit">Create ride</button>
+    </form>
+  </div>
+</section>
 {% endblock %}

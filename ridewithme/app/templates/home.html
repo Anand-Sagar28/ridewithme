@@ -1,34 +1,196 @@
+{% set error = request.args.get('error') %}
+{% set joined = request.args.get('joined') %}
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Upcoming Rides</h1>
-
-{% for ride in rides %}
-  <div class="ride-card">
-    <div class="ride-title">{{ ride.title }}</div>
-
-    <div class="meta">
-      {{ ride.start_location }} → {{ ride.end_location }}
+<section class="hero">
+  <div class="hero-content">
+    <p class="eyebrow">Community rides, built for trust</p>
+    <h1>Move together. Arrive together.</h1>
+    <p class="hero-copy">
+      RideWithMe helps commuters and weekend explorers connect for shared rides with verified
+      leaders, clear routes, and secure participation codes.
+    </p>
+    <div class="hero-actions">
+      <a class="btn" href="#rides">Browse Rides</a>
+      {% if not session.get("user_id") %}
+        <a class="btn btn-ghost" href="/register">Create an Account</a>
+      {% endif %}
     </div>
-
-    <div class="meta">
-      {{ ride.start_datetime }}
+    <div class="hero-stats">
+      <div>
+        <h3>120+</h3>
+        <p class="muted">Active local groups</p>
+      </div>
+      <div>
+        <h3>4.9★</h3>
+        <p class="muted">Average ride rating</p>
+      </div>
+      <div>
+        <h3>1k+</h3>
+        <p class="muted">Safe rides completed</p>
+      </div>
     </div>
-
-    <div class="meta">
-      Leader: {{ ride.leader_name }}
-    </div>
-
-    <div class="meta">
-      Slots left: {{ ride.available_slots }}
-    </div>
-
-    <a class="btn" href="/rides/{{ ride.id }}">View Details</a>
   </div>
-{% endfor %}
+  <div class="hero-card">
+    <div class="card-tag">Next up</div>
+    <h3>Sunset Loop Ride</h3>
+    <p class="muted">Downtown → Riverside Park</p>
+    <div class="hero-card-meta">
+      <span>Sat 6:30 PM</span>
+      <span>Leader: Aditi S.</span>
+    </div>
+    <div class="pill-row">
+      <span class="pill">Beginner-friendly</span>
+      <span class="pill">Helmets required</span>
+    </div>
+    <a class="btn btn-block" href="#rides">See all rides</a>
+  </div>
+</section>
 
-{% if config.ADMIN_MODE %}
-<a class="floating-add" href="/admin/rides/new">+</a>
-{% endif %}
+<section id="how" class="section">
+  <div class="section-header">
+    <h2>How it works</h2>
+    <p class="muted">Three simple steps to ride confidently.</p>
+  </div>
+  <div class="steps">
+    <div class="step-card">
+      <h3>1. Pick your ride</h3>
+      <p class="muted">Choose a route, time, and leader. View slots and rider notes instantly.</p>
+    </div>
+    <div class="step-card">
+      <h3>2. Confirm your spot</h3>
+      <p class="muted">Secure your place with a quick confirmation and participation code.</p>
+    </div>
+    <div class="step-card">
+      <h3>3. Meet & move</h3>
+      <p class="muted">Show the code, meet at the start point, and ride together.</p>
+    </div>
+  </div>
+</section>
+
+<section id="rides" class="section">
+  <div class="section-header">
+    <h2>Upcoming rides</h2>
+    <p class="muted">Fresh routes from verified leaders near you.</p>
+  </div>
+
+  {% if rides %}
+    <div class="ride-grid">
+      {% for ride in rides %}
+      <div class="ride-card">
+        <div class="ride-card-top">
+          <div>
+            <h3>{{ ride.title }}</h3>
+            <p class="muted">{{ ride.start_location }} → {{ ride.end_location }}</p>
+          </div>
+          <span class="ride-pill">{{ ride.available_slots }} slots left</span>
+        </div>
+        <p class="ride-date">{{ ride.start_datetime }}</p>
+        <p class="muted">Leader: {{ ride.leader_name }}</p>
+
+        <div class="ride-actions">
+          <a class="btn btn-ghost" href="#ride{{ ride.id }}">View Details</a>
+          {% if session.get("user_id") %}
+            <a class="btn" href="#confirm{{ ride.id }}">Join Ride</a>
+          {% else %}
+            <a class="btn" href="/login">Login to Join</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div id="ride{{ ride.id }}" class="modal">
+        <div class="modal-content">
+          <a href="#" class="close">×</a>
+          <h2>{{ ride.title }}</h2>
+          <p class="muted">{{ ride.start_location }} → {{ ride.end_location }}</p>
+          <p class="ride-date">{{ ride.start_datetime }}</p>
+          <p>{{ ride.description }}</p>
+          <div class="modal-actions">
+            {% if session.get("user_id") %}
+              <a class="btn" href="#confirm{{ ride.id }}">Join Ride</a>
+            {% else %}
+              <a class="btn" href="/login">Login to Join</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div id="confirm{{ ride.id }}" class="modal">
+        <div class="modal-content">
+          <a href="#" class="close">×</a>
+          <h3>Confirm participation</h3>
+          <p class="muted">You are reserving a seat on this ride.</p>
+
+          {% if error %}
+            <p class="form-error">{{ error }}</p>
+          {% endif %}
+
+          {% if joined %}
+            <p class="form-success">Joined successfully!</p>
+          {% endif %}
+          <form method="POST" action="/rides/{{ ride.id }}/join">
+            <button class="btn btn-block">Confirm</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>No rides scheduled yet</h3>
+      <p class="muted">Leaders can create the first ride and set the pace for the community.</p>
+      {% if config.ADMIN_MODE %}
+        <a class="btn" href="/admin/rides/new">Create a Ride</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if config.ADMIN_MODE %}
+  <a class="floating-add" href="/admin/rides/new">+</a>
+  {% endif %}
+</section>
+
+<section id="safety" class="section section-alt">
+  <div class="section-header">
+    <h2>Safety-first by design</h2>
+    <p class="muted">Every ride is guided by local leaders and simple verification.</p>
+  </div>
+  <div class="safety-grid">
+    <div class="safety-card">
+      <h3>Verified leaders</h3>
+      <p class="muted">Ride hosts share contact info and route details up front.</p>
+    </div>
+    <div class="safety-card">
+      <h3>Participation codes</h3>
+      <p class="muted">Unique codes confirm riders and reduce last-minute no-shows.</p>
+    </div>
+    <div class="safety-card">
+      <h3>Clear expectations</h3>
+      <p class="muted">See required gear, pace, and start times before committing.</p>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="section">
+  <div class="section-header">
+    <h2>Questions?</h2>
+    <p class="muted">Quick answers to common questions.</p>
+  </div>
+  <div class="faq-grid">
+    <div class="faq-card">
+      <h3>Is RideWithMe free?</h3>
+      <p class="muted">Most rides are free. Some leaders add a small fee for gear or guides.</p>
+    </div>
+    <div class="faq-card">
+      <h3>How do I become a leader?</h3>
+      <p class="muted">Admins can create rides from the dashboard. Reach out to us to get verified.</p>
+    </div>
+    <div class="faq-card">
+      <h3>What if I need to cancel?</h3>
+      <p class="muted">Cancel early so other riders can take your spot. Fees follow the leader's policy.</p>
+    </div>
+  </div>
+</section>
 
 {% endblock %}
